@@ -53,4 +53,20 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  resources :sessions
+  resources :users
+
+  get '/', to: 'sessions#new'
+  get '/oauth/connect', to: 'sessions#connect'
+  get '/oauth/callback', to: 'sessions#callback'
+  get '/nav', to: 'users#index'
+
+  get '/user_recent_media', to: 'users#recent_media'
+
+  # get '/nav', to: index4
+  # get '/user_recent_media', to: index5
+
+
+
 end
