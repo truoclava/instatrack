@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
   resources :sessions
   resources :users
+  resources :maps
 
   get '/connect', to: 'sessions#new'
   get '/oauth/connect', to: 'sessions#connect'
@@ -69,6 +70,6 @@ Rails.application.routes.draw do
   # get '/nav', to: index4
   # get '/user_recent_media', to: index5
 
-
+  get '/maptest', to: 'maps#index'
 
 end

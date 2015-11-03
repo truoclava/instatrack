@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   def callback
     response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
     session[:access_token] = response.access_token
-    redirect_to "/nav"
+    redirect_to "/maptest"
   end
 
 end 

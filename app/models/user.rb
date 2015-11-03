@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
         @users << @user
       end 
     end 
-    binding.pry
+    # binding.pry
     @users
   end 
 
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     if most_recent_media
       if most_recent_media[:location]
         location = most_recent_media[:location]
-        user.build_media(latitude: location[:latitude], longitude: location[:latitude], location_name: location[:name], location_id: location[:id])
+        user.build_media(latitude: location[:latitude], longitude: location[:longitude], location_name: location[:name], location_id: location[:id])
       end 
     else 
       nil
