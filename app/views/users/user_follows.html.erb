@@ -1,0 +1,10 @@
+<h1>Users <%= @current_user.username %> follows</h1>
+
+
+<% @client.user_follows.each do |user| %>
+<strong>Username:</strong> <%= user.username %>
+<strong>ID:</strong> <%= user.id %>
+<strong>Full Name:</strong> <%= user.full_name %>
+<strong>Profile URL:</strong> <%= user.profile_picture %>
+<br>
+<% end %>
