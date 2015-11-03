@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  full_name       :string
+#  username        :string
+#  instagram_id    :float
+#  profile_picture :string
+#
+
 class User < ActiveRecord::Base
   has_one :media, dependent: :destroy
 
@@ -14,7 +25,6 @@ class User < ActiveRecord::Base
         @users << @user
       end 
     end 
-    # binding.pry
     @users
   end 
 

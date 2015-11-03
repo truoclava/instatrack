@@ -61,15 +61,10 @@ Rails.application.routes.draw do
   get '/connect', to: 'sessions#new'
   get '/oauth/connect', to: 'sessions#connect'
   get '/', to: 'sessions#callback'
-  # get '/oauth/callback', to: 'sessions#callback'
   get '/nav', to: 'users#index'
-
   get '/user_recent_media', to: 'users#user_recent_media'
   get '/user_follows', to: 'users#user_follows'
-
-  # get '/nav', to: index4
-  # get '/user_recent_media', to: index5
-
-  get '/maptest', to: 'maps#index'
+  get '/map', to: 'maps#index'
+  get '/logout' => 'sessions#destroy’
 
 end
