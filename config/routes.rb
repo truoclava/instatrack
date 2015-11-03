@@ -57,12 +57,14 @@ Rails.application.routes.draw do
   resources :sessions
   resources :users
 
-  get '/', to: 'sessions#new'
+  get '/connect', to: 'sessions#new'
   get '/oauth/connect', to: 'sessions#connect'
-  get '/oauth/callback', to: 'sessions#callback'
+  get '/', to: 'sessions#callback'
+  # get '/oauth/callback', to: 'sessions#callback'
   get '/nav', to: 'users#index'
 
-  get '/user_recent_media', to: 'users#recent_media'
+  get '/user_recent_media', to: 'users#user_recent_media'
+  get '/user_follows', to: 'users#user_follows'
 
   # get '/nav', to: index4
   # get '/user_recent_media', to: index5
