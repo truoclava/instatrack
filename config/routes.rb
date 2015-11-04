@@ -65,6 +65,6 @@ Rails.application.routes.draw do
   get '/user_recent_media', to: 'users#user_recent_media'
   get '/user_follows', to: 'users#user_follows'
   get '/map', to: 'maps#index'
-  get '/logout' => 'sessions#destroy’
+  get '/logout' => "sessions#destroy"
 
 end

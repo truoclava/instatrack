@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
       ClientUser.create({"client_id" => current_client.id,"user_id" => user.id})
 
       user.get_media(client, user)
+    end 
   end 
 
   def get_media(client, user)
