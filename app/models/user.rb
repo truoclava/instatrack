@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  full_name       :string
+#  username        :string
+#  instagram_id    :float
+#  profile_picture :string
+#
+
 class User < ActiveRecord::Base
   has_many :client_users
   has_many :clients, through: :client_users
@@ -16,9 +27,6 @@ class User < ActiveRecord::Base
       ClientUser.create({"client_id" => current_client.id,"user_id" => user.id})
 
       user.get_media(client, user)
-
-    end 
-    # binding.pry
   end 
 
   def get_media(client, user)
