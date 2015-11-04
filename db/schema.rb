@@ -11,21 +11,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102211207) do
+ActiveRecord::Schema.define(version: 20151104185427) do
+
+  create_table "client_users", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "full_name"
+    t.string   "username"
+    t.float    "instagram_id"
+    t.string   "profile_picture"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "media", force: :cascade do |t|
-    t.float   "latitude"
-    t.float   "longitude"
-    t.string  "location_name"
-    t.integer "location_id"
-    t.integer "user_id"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "location_name"
+    t.integer  "location_id"
+    t.integer  "user_id"
+    t.string   "image_thumbnail"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "full_name"
-    t.string "username"
-    t.float  "instagram_id"
-    t.string "profile_picture"
+    t.string   "full_name"
+    t.string   "username"
+    t.float    "instagram_id"
+    t.string   "profile_picture"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
