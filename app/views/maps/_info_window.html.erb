@@ -1,1 +1,6 @@
-<h1>HELLO</h1>
+<%= link_to user.username, "http://instagram.com/#{user.username}",  target: :_blank %><br>
+<%= Time.at(user.media.created_time.to_i).to_formatted_s(:long)  %><br>
+<%= user.media.location_name %><br>
+<%= image_tag(user.media.image_thumbnail) %>
+
+
