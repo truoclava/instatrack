@@ -13,7 +13,7 @@ class MapsController < ApplicationController
     picture_size = 40
 
     @hash = Gmaps4rails.build_markers(valid_users) do |user, marker|
-      if user.valid? 
+      user
       # user.media.image_thumbnail
         marker.json({ id: user.instagram_id })
         marker.lat user.media.latitude
@@ -23,12 +23,17 @@ class MapsController < ApplicationController
           :width   => "#{picture_size}",
           :height  => "#{picture_size}"
           })
-      end
     end 
   end
 
-  def users
+  def assign
+      @current_client.full_name = @client.user.full_name
+      @current_client.username = @client.user.username
+      @current_client.profile_picture = @client.user.profile_picture
+      @current_client.save
+  end
 
+  def users
     @client = Instagram.client(:access_token => session[:access_token])
 
     if Client.find_by(instagram_id: @client.user.id)
@@ -36,18 +41,31 @@ class MapsController < ApplicationController
       @current_client.users
     else # Client does NOT exist yet
       @current_client = Client.create(instagram_id: @client.user.id)
-      @current_client.full_name = @client.user.full_name
-      @current_client.username = @client.user.username
-      @current_client.profile_picture = @client.user.profile_picture
-      @current_client.save
+      assign
       User.get_users(@client, @current_client)
-      binding.pry
     end 
   end 
+
+  def update_users
+    @client = Instagram.client(:access_token => session[:access_token])
+
+    User.all.each do |user|
+        user_params = {"full_name" => user[:full_name], "username" => user[:username], "instagram_id" => user[:instagram_id], "profile_picture" => user[:profile_picture], "created_at" => user[:created_at], "updated_at" => user[:updated_at] }
+        user.update(user_params)
+        user.save
+    end
+    redirect_to maps_path
+
+      # @current_client = Client.create(instagram_id: @client.user.id)
+      # assign
+      # User.get_users(@client, @current_client)
+  end
 
   def valid_users
     users.select do |user|
       user.media 
-    end 
+    end
   end 
-end 
+end
+
+

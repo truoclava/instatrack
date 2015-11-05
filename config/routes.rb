@@ -66,5 +66,6 @@ Rails.application.routes.draw do
   get '/user_follows', to: 'users#user_follows'
   get '/map', to: 'maps#index'
   get '/logout' => "sessions#destroy"
+  get '/update', to: 'maps#update_users'
 
 end
