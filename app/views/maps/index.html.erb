@@ -3,7 +3,7 @@
 
 
 
-<h1><%= @current_client.username %></h1>
+<h1><%= @client.user[:username] %></h1>
 <h1>First Updated: <%= @current_client.created_at.localtime.to_formatted_s(:long) %></h1>
 <h1>Last Updated: <%= @current_client.updated_at.localtime.to_formatted_s(:long) %></h1>
 

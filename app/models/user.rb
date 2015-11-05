@@ -17,18 +17,24 @@ class User < ActiveRecord::Base
   has_many :clients, through: :client_users
   has_one :media, dependent: :destroy
 
+  attr_accessor :username, :profile_picture
+
   def self.get_users(client, current_client)
     client.user_follows.each do |user|
       @user = User.create({"instagram_id" => user[:id]})
+      @user.username = user[:username]
+      @user.profile_picture = user[:profile_picture]
+
       ClientUser.create({"client_id" => current_client.id,"user_id" => @user.id})
       @user.get_media(client)
     end 
   end 
 
-  def get_media(client)
+
+  def get_media(client) # show media based on LAST UPDATE of client
     @current_client = Client.find_by(instagram_id: client.user.id)
     max_timestamp =  @current_client.updated_at.to_i
-    last_media = client.user_recent_media(user.instagram_id, 1, {max_timestamp: max_timestamp})[0]
+    last_media = client.user_recent_media(self.instagram_id, 1, {max_timestamp: max_timestamp})[0]
     if last_media && last_media[:location]
       media_id = last_media[:id]
       created_time = last_media[:created_time]
@@ -43,19 +49,7 @@ class User < ActiveRecord::Base
     # what do we REALLY need in the database
   end 
 
-  def info 
-    @client = Instagram.client(:access_token => session[:access_token])
-    @client.user(self.instagram_id)
-  end 
-
-  def username
-    info[:username]
-  end 
-
-  def profile_picture
-    info[:profile_picture]
-  end 
-
+ 
 
 end 
 

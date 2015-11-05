@@ -21,10 +21,7 @@ ActiveRecord::Schema.define(version: 20151104185427) do
   end
 
   create_table "clients", force: :cascade do |t|
-    t.string   "full_name"
-    t.string   "username"
     t.string   "instagram_id"
-    t.string   "profile_picture"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -43,10 +40,7 @@ ActiveRecord::Schema.define(version: 20151104185427) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "full_name"
-    t.string   "username"
     t.string   "instagram_id"
-    t.string   "profile_picture"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
