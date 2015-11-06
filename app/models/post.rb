@@ -10,6 +10,6 @@
 #  user_id       :integer
 #
 
-class Media < ActiveRecord::Base
+class Post < ActiveRecord::Base
   belongs_to :user # foreign key, user_id
 end 

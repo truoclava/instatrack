@@ -8,43 +8,72 @@ class MapsController < ApplicationController
     
     # @dots = [Map.new(latitude: 40.705333, longitude: -74.0161583)]
     @client = Instagram.client(:access_token => session[:access_token])
+    @users = current_client.users
+    @marker_hash = marker_hash
+    binding.pry
+    @current_client = current_client
+    @current_client.username = @client.user.username
+    @current_client.profile_picture = @client.user.profile_picture
+  end
 
+  def marker_hash
     picture_size = 40
+    Gmaps4rails.build_markers(valid_posts) do |post, marker|
+      marker.lat post.latitude
+      marker.lng post.longitude
 
-    @hash = Gmaps4rails.build_markers(valid_users) do |user, marker|
-      # user.media.image_thumbnail
-      marker.lat user.media.latitude
-      marker.lng user.media.longitude
-      marker.json({ id: user.id })
       marker.picture({
-        :url     => "http://i.embed.ly/1/display/resize?height=#{picture_size}&width=#{picture_size}&url=#{@client.user(user.instagram_id)[:profile_picture].gsub("/","%2F").gsub(":","%3A")}&key=#{Figaro.env.embedly_key}",
+        :url     => "http://i.embed.ly/1/display/resize?height=#{picture_size}&width=#{picture_size}&url=#{@client.user(post.user.instagram_id)[:profile_picture].gsub("/","%2F").gsub(":","%3A")}&key=#{Figaro.env.embedly_key}",
         :width   => "#{picture_size}",
         :height  => "#{picture_size}"
         })
-      marker.infowindow render_to_string(:partial => "/maps/info_window", :locals => { :user => user})
+      marker.infowindow render_to_string(:partial => "/maps/info_window", :locals => { :post => post})
     end 
-
-  end
+  end 
 
   def current_client
-    Client.find_by(instagram_id: @client.user.id)
+    Client.find_or_create_by(instagram_id: @client.user.id)
   end
 
   def users
-    # refactor this somehow
-    if current_client
-      current_client.users
-    else # Client does NOT exist yet
-      current_client = Client.create(instagram_id: @client.user.id)
-      User.get_users(@client, current_client)
-    end 
+    User.get_users(@client, current_client)
   end 
 
-  def valid_users
-    users.select do |user|
-      user.media 
-    end 
+  def valid_posts
+    max_time = current_client.updated_at.to_i # only get stuff that is LESS than max time 
+    valid_posts = []
+    current_client.users.each do |user|
+      if !user.posts.nil?
+        post = Post.where("user_id = ? AND created_time < ?", user.id, max_time).order(created_time: :desc).limit(1)
+        valid_posts << post
+      end 
+    end
+    valid_posts.flatten
   end 
+
+  def update
+    old_users = current_client.users
+    new_users = @client.user_follows
+
+    old_users.each do |old_user|
+      new_users.each do |new_user|
+        if old_user.instagram_id != new_user[:id]
+          @clientuser = ClientUser.find(client_id: current_client.id, user_id: old_user.id)
+          @clientuser.destroy 
+        end 
+      end 
+    end
+
+    new_users.each do |new_user|
+      @user = User.find_by_or_create(instagram_id: new_user[:id])
+      ClientUser.find_or_create_by(client_id: current_client.id, user_id: @user.id)
+      @user.get_media(client)
+      @user.update 
+    end 
+
+
+  end 
+
 
 
   # def update

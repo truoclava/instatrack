@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(version: 20151104185427) do
     t.datetime "updated_at"
   end
 
-  create_table "media", force: :cascade do |t|
-    t.string   "media_id"
+  create_table "posts", force: :cascade do |t|
+    t.string   "instagram_id"
     t.string   "created_time"
     t.float    "latitude"
     t.float    "longitude"

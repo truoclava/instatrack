@@ -15,17 +15,14 @@
 class User < ActiveRecord::Base
   has_many :client_users
   has_many :clients, through: :client_users
-  has_one :media, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
   attr_accessor :username, :profile_picture
 
   def self.get_users(client, current_client)
     client.user_follows.each do |user|
-      @user = User.create({"instagram_id" => user[:id]})
-      @user.username = user[:username]
-      @user.profile_picture = user[:profile_picture]
-
-      ClientUser.create({"client_id" => current_client.id,"user_id" => @user.id})
+      @user = User.find_or_create_by(instagram_id: user[:id])
+      ClientUser.find_or_create_by(client_id: current_client.id, user_id: @user.id)
       @user.get_media(client)
     end 
   end 
@@ -33,14 +30,17 @@ class User < ActiveRecord::Base
 
   def get_media(client) # show media based on LAST UPDATE of client
     @current_client = Client.find_by(instagram_id: client.user.id)
-    max_timestamp =  @current_client.updated_at.to_i
-    last_media = client.user_recent_media(self.instagram_id, 1, {max_timestamp: max_timestamp})[0]
-    if last_media && last_media[:location]
-      media_id = last_media[:id]
-      created_time = last_media[:created_time]
-      location = last_media[:location]
-      image_thumbnail = last_media[:images][:thumbnail][:url]
-      self.create_media(media_id: media_id, created_time: created_time, latitude: location[:latitude], longitude: location[:longitude], location_name: location[:name], location_id: location[:id], image_thumbnail: image_thumbnail)
+    # max_timestamp =  @current_client.updated_at.to_i
+    # last_media = client.user_recent_media(self.instagram_id, 1, {max_timestamp: max_timestamp})[0]
+    last_media = client.user_recent_media(self.instagram_id, 1)[0]
+    if last_media && last_media[:location] 
+      if !Post.exists?(instagram_id: last_media[:id]) 
+        instagram_id = last_media[:id]
+        created_time = last_media[:created_time]
+        location = last_media[:location]
+        image_thumbnail = last_media[:images][:thumbnail][:url]
+        self.posts.create(instagram_id: instagram_id, created_time: created_time, latitude: location[:latitude], longitude: location[:longitude], location_name: location[:name], location_id: location[:id], image_thumbnail: image_thumbnail)
+      end 
     end 
     # media = client.media_item(user.media.media_id)
     # created_time = media[:created_time]
@@ -48,6 +48,7 @@ class User < ActiveRecord::Base
     # image_thumbnail = media[:images][:thumbnail][:url]
     # what do we REALLY need in the database
   end 
+
 
  
 

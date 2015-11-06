@@ -1,6 +1,6 @@
-<%= link_to @client.user(user.instagram_id)[:username], "http://instagram.com/#{@client.user(user.instagram_id)[:username]}",  target: :_blank %><br>
-<%= Time.at(user.media.created_time.to_i).to_formatted_s(:long)  %><br>
-<%= user.media.location_name %><br>
-<%= image_tag(user.media.image_thumbnail) %>
+<%= link_to @client.user(post.user.instagram_id).username, "http://instagram.com/#{@client.user(post.user.instagram_id).username}",  target: :_blank %><br>
+<%= Time.at(post.created_time.to_i).to_formatted_s(:long)  %><br>
+<%= post.location_name %><br>
+<%= image_tag(post.image_thumbnail) %>
 
 

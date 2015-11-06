@@ -1,7 +1,7 @@
-class CreateMedia < ActiveRecord::Migration
+class CreatePosts < ActiveRecord::Migration
   def change
-    create_table :media do |t|
-      t.string :media_id
+    create_table :posts do |t|
+      t.string :instagram_id
       t.string :created_time
       t.float :latitude
       t.float :longitude

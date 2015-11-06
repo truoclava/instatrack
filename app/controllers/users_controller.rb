@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     @client = Instagram.client(:access_token => session[:access_token])
     @current_user = @client.user
 
-    @users = User.get_users(@client)
+    @users = User.all 
   end
 
   def destroy
