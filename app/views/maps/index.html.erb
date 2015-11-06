@@ -6,7 +6,7 @@
 <h1>First Updated: <%= @current_client.created_at.localtime.to_formatted_s(:long) %></h1>
 <h1>Last Updated: <%= @current_client.updated_at.localtime.to_formatted_s(:long) %></h1>
 
-<button><%= link_to 'Update', 'map#update' %></button>
+<button><%= link_to 'Update', '/update' %></button>
 
 <div style='width: 1500px;'>
   <div id="map" style='width: 1500px; height: 800px;'></div>

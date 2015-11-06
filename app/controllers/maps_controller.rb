@@ -6,11 +6,9 @@ class MapsController < ApplicationController
 
     # num = 120
     
-    # @dots = [Map.new(latitude: 40.705333, longitude: -74.0161583)]
     @client = Instagram.client(:access_token => session[:access_token])
     @users = current_client.users
     @marker_hash = marker_hash
-    binding.pry
     @current_client = current_client
     @current_client.username = @client.user.username
     @current_client.profile_picture = @client.user.profile_picture
@@ -32,6 +30,7 @@ class MapsController < ApplicationController
   end 
 
   def current_client
+    @client = Instagram.client(:access_token => session[:access_token])
     Client.find_or_create_by(instagram_id: @client.user.id)
   end
 
@@ -52,26 +51,33 @@ class MapsController < ApplicationController
   end 
 
   def update
+    @client = Instagram.client(:access_token => session[:access_token])
     old_users = current_client.users
     new_users = @client.user_follows
 
-    old_users.each do |old_user|
-      new_users.each do |new_user|
-        if old_user.instagram_id != new_user[:id]
-          @clientuser = ClientUser.find(client_id: current_client.id, user_id: old_user.id)
-          @clientuser.destroy 
-        end 
-      end 
-    end
+    # delete association with current client and user if user no longer follows
 
-    new_users.each do |new_user|
-      @user = User.find_by_or_create(instagram_id: new_user[:id])
-      ClientUser.find_or_create_by(client_id: current_client.id, user_id: @user.id)
-      @user.get_media(client)
-      @user.update 
+    old_users_ids = []
+    old_users.each do |old_user|
+      old_users_ids << old_user.instagram_id
     end 
 
+    new_users.each do |new_user|
+      if old_users_ids.include? new_user[:id] # all exist in the new and already exist in old
+        @user = User.find_by(instagram_id: new_user[:id])
+      else 
+        #false we have to create the new_user 
+        @user = User.find_or_create_by(instagram_id: new_user[:id])
+        ClientUser.create(client_id: current_client.id, user_id: @user.id)
+      end 
+      @user.get_media(@client)
+    end 
 
+    # destroy association
+
+    current_client.updated_at = Time.now 
+
+    redirect_to maps_path
   end 
 
 

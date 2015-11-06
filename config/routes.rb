@@ -62,9 +62,9 @@ Rails.application.routes.draw do
   get '/oauth/connect', to: 'sessions#connect'
   get '/', to: 'sessions#callback'
   get '/nav', to: 'users#index'
-  get '/user_recent_media', to: 'users#user_recent_media'
-  get '/user_follows', to: 'users#user_follows'
+
   get '/map', to: 'maps#index'
   get '/logout' => "sessions#destroy"
+  get '/update', to: 'maps#update'
 
 end
