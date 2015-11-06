@@ -166,6 +166,12 @@ hr.small {
     -o-background-size: cover;
 }
 
+.sidebar {
+    font-family: Copperplate, sans-serif;
+    background-color: #4682B4;
+    color: white;
+}
+
 
 /* About */
 

@@ -5,15 +5,18 @@
 
   
 <p><div class="topbar"><br><br><br>
-  <center><p style="font-size:63px">InstaTrack</p></center>
-  <strong><h4> Full Name: <%=@current_client.full_name %></h1>
-<h4>Username: <%=@current_client.username %></h1>
-<h4>Last Updated: <%= @current_client.updated_at %></h1>
-  <button><%= link_to 'Update', update_path %></button></strong>
+  <center><p style="font-size:61px">InstaTrack</p></center>
+
 
 
   <br><br>
 </div><p>
+
+<br><div class="sidebar"><strong><h4> Full Name: <%=@current_client.full_name %></h1>
+<h4>Username: <%=@current_client.username %></h1>
+<h4>Last Updated: <%= @current_client.updated_at %></h1>
+  <button><%= link_to 'Update', update_path %></button></strong></div><br><br>
+
 <center><div style='width: 1200px;'>
   <div id="map" style='width: 1200px; height: 800px;'></div>
 </div></center>
