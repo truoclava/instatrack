@@ -45,3 +45,45 @@ class MapsController < ApplicationController
       user.media 
     end 
   end 
+
+
+  # def update
+  #   @current_client = Client.find_by(instagram_id: @client.user.id)
+  #   old_users = User.all # our table schema
+
+  #   new_users = @client.user_follows # instagram hash 
+
+  #   old_users.each do |old_user|
+  #     new_users.each do |new_user| 
+  #     # check for everyone in old user that does not exist in new user
+  #       if old_user.instagram_id != new_user[:id]
+  #         old_user.destroy
+  #       end 
+  #     end 
+  #   end 
+
+  #   new_users.each do |new_user|
+  #     @user = User.find_by_or_create(instagram_id: new_user[:id])
+  #     @user.update(new_user_params)
+
+
+  #     Media.find_by_or_create(media_id: client.user_recent_media(new_user[:id], 1)[0][:id])
+
+  #     @user.save
+  #   end
+
+
+
+
+
+
+
+
+  #      # deleted old_user
+  # end
+
+
+  # @client.most_recent_media(@user.instagram_id, 1)[0].
+
+
+end 
