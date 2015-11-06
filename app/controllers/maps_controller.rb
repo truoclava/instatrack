@@ -7,7 +7,7 @@ class MapsController < ApplicationController
     # num = 120
     
     @client = Instagram.client(:access_token => session[:access_token])
-    @users = current_client.users
+    users
     @marker_hash = marker_hash
     @current_client = current_client
     @current_client.username = @client.user.username
@@ -39,46 +39,48 @@ class MapsController < ApplicationController
   end 
 
   def valid_posts
-    max_time = current_client.updated_at.to_i # only get stuff that is LESS than max time 
+    # max_time = Time.now.to_i
+    # max_time = current_client.updated_at.to_i # only get stuff that is LESS than max time 
     valid_posts = []
     current_client.users.each do |user|
       if !user.posts.nil?
-        post = Post.where("user_id = ? AND created_time < ?", user.id, max_time).order(created_time: :desc).limit(1)
+        post = Post.where("user_id = ?", user.id).order(created_time: :desc).limit(1)
+        # post = Post.where("user_id = ? AND created_time < ?", user.id, max_time).order(created_time: :desc).limit(1)
         valid_posts << post
       end 
     end
     valid_posts.flatten
   end 
 
-  def update
-    @client = Instagram.client(:access_token => session[:access_token])
-    old_users = current_client.users
-    new_users = @client.user_follows
+  # def update
+  #   @client = Instagram.client(:access_token => session[:access_token])
+  #   old_users = current_client.users
+  #   new_users = @client.user_follows
 
-    # delete association with current client and user if user no longer follows
+  #   # delete association with current client and user if user no longer follows
 
-    old_users_ids = []
-    old_users.each do |old_user|
-      old_users_ids << old_user.instagram_id
-    end 
+  #   old_users_ids = []
+  #   old_users.each do |old_user|
+  #     old_users_ids << old_user.instagram_id
+  #   end 
 
-    new_users.each do |new_user|
-      if old_users_ids.include? new_user[:id] # all exist in the new and already exist in old
-        @user = User.find_by(instagram_id: new_user[:id])
-      else 
-        #false we have to create the new_user 
-        @user = User.find_or_create_by(instagram_id: new_user[:id])
-        ClientUser.create(client_id: current_client.id, user_id: @user.id)
-      end 
-      @user.get_media(@client)
-    end 
+  #   new_users.each do |new_user|
+  #     if old_users_ids.include? new_user[:id] # all exist in the new and already exist in old
+  #       @user = User.find_by(instagram_id: new_user[:id])
+  #     else 
+  #       #false we have to create the new_user 
+  #       @user = User.find_or_create_by(instagram_id: new_user[:id])
+  #       ClientUser.create(client_id: current_client.id, user_id: @user.id)
+  #     end 
+  #     @user.get_media(@client)
+  #   end 
 
-    # destroy association
+  #   # destroy association
 
-    current_client.updated_at = Time.now 
+  #   current_client.update(instagram_id: @client.user.id)
 
-    redirect_to maps_path
-  end 
+  #   redirect_to maps_path
+  # end 
 
 
 

@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
   has_many :clients, through: :client_users
   has_many :posts, dependent: :destroy
 
+  validates :instagram_id, presence: true
+
   attr_accessor :username, :profile_picture
 
   def self.get_users(client, current_client)
@@ -34,7 +36,7 @@ class User < ActiveRecord::Base
     # last_media = client.user_recent_media(self.instagram_id, 1, {max_timestamp: max_timestamp})[0]
     last_media = client.user_recent_media(self.instagram_id, 1)[0]
     if last_media && last_media[:location] 
-      if !Post.exists?(instagram_id: last_media[:id]) 
+      if !Post.exists?(instagram_id: last_media[:id]) # check if post already exists on user 
         instagram_id = last_media[:id]
         created_time = last_media[:created_time]
         location = last_media[:location]
